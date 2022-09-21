@@ -15,7 +15,7 @@ function updateDatabase() {
         },
     ]).then( async ({task}) => { 
         if(task=='View All Departments') {
-            db.promise().query('SELECT * FROM departments').then(data=>{
+            db.promise().query('SELECT departments.name AS department, concat(managers.first_name, " ", managers.last_name) AS manager FROM departments INNER JOIN managers ON departments.manager_id=managers.id;').then(data=>{
                 console.table(data[0]);
                 updateDatabase();
             });
