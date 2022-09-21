@@ -74,3 +74,7 @@ role_id: INT to hold reference to employee role
 manager_id: INT to hold reference to another employee that is the manager of the current employee (null if the employee has no manager)
 
 You might want to use a separate file that contains functions for performing specific SQL queries you'll need to use. A constructor function or class could be helpful for organizing these. You might also want to include a seeds.sql file to pre-populate your database, making the development of individual features much easier.
+
+## Application Demo Video
+
+https://drive.google.com/file/d/17jb37flxFuDP7ZmYYxgy0pFevxU0s605/view
