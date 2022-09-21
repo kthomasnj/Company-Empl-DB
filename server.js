@@ -30,7 +30,7 @@ function updateDatabase() {
         }; 
         
         if(task=='View All Roles') {
-            db.promise().query('SELECT * FROM roles').then(data=>{
+            db.promise().query('SELECT roles.title AS role, roles.salary, departments.name AS department FROM roles INNER JOIN departments ON departments.id=roles.department_id;').then(data=>{
                 console.table(data[0]);
                 updateDatabase();
             });
