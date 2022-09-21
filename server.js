@@ -130,33 +130,38 @@ function updateDatabase() {
                 {
                     type: 'input',
                     name: 'first_name',
-                    message: 'What is the manger\'s first name?',
+                    message: 'What is the first name of the manager?'
                 },
                 {
                     type: 'input',
                     name: 'last_name',
-                    message: 'What is the manager\'s last name?'
-                },
-                {
-                    type: 'input',
-                    name: 'name',
-                    message: 'What department is the managers department?'
+                    message: 'What is the last name of the manager?'
                 }
             ])
                 .then(manData => {
-                    let firstName = manData.first_name;
-                    let lastName = manData.last_name;
-                    let department = manData.name;
-                    let updateManagers = { firstName, lastName };
+                    db.promise().query(`INSERT INTO managers SET ?`, manData).then(data => { 
+                            prompt([
+                                {
+                                    type: 'input',
+                                    name: 'name',
+                                    message: 'What will be the managers department?'
+                                }
+                            ])
+                                .then( async deptData  =>  {                        
+                                    let managerID = await db.promise().query(`SELECT * FROM managers ORDER BY id DESC LIMIT 1`);
+                                    let newDept = {'name': deptData.name, 'manager_id': managerID[0][0].id};
 
-                    db.promise().query(`INSERT INTO managers SET ?`, updateManagers).then(data => {
-                        db.promise().query(`SELECT * FROM managers ORDER BY id DESC LIMIT 1;`).then(data => {
-                            db.promise().query(`INSERT INTO departments SET ?`, department).then(data => {
-                                updateDatabase();
-                            });
-                        })
-                    })
-                });
+                                    console.log(managerID[0][0].id);
+                                    console.log('newDept: ',newDept);
+
+                                    db.promise().query(`INSERT INTO departments SET ?`, newDept).then(data => {
+    
+                                        updateDatabase();
+                                    });
+                                }) 
+                    });
+                })
+        };
 
             if (task == 'Update Employee Role') {
                 let employees = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM employees');
@@ -185,5 +190,3 @@ function updateDatabase() {
         });
 
 };
-
-
