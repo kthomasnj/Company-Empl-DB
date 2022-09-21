@@ -37,7 +37,7 @@ function updateDatabase() {
         }; 
 
         if(task=='Add Department') {
-            let manager = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM employees')
+            let manager = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM managers')
 
             prompt([
                 {
