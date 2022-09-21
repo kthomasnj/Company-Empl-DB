@@ -11,7 +11,7 @@ function updateDatabase() {
             type: 'list',
             name: "task",
             message: "What would you like to do?",
-            choices: ['View All Employees', 'View All Roles', 'View All Departments', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role'],
+            choices: ['View All Employees', 'View All Managers', 'View All Roles', 'View All Departments', 'Add Department', 'Add Role', 'Add Employee', 'Add Manager', 'Update Employee Role'],
         },
     ]).then( async ({task}) => { 
         if(task=='View All Departments') {
@@ -23,6 +23,14 @@ function updateDatabase() {
         
         if(task=='View All Employees') {
             db.promise().query('SELECT employees.first_name, employees.last_name, roles.title, roles.salary FROM employees INNER JOIN roles ON employees.role_id=roles.id;')
+            .then(data=>{
+                console.table(data[0]);
+                updateDatabase();
+            });
+        }; 
+
+        if(task=='View All Managers') {
+            db.promise().query('SELECT managers.first_name, managers.last_name, departments.name AS department FROM managers INNER JOIN departments ON managers.id=departments.manager_id;')
             .then(data=>{
                 console.table(data[0]);
                 updateDatabase();
@@ -116,6 +124,29 @@ function updateDatabase() {
                 });
             })
         }; 
+
+        if(task=='Add Manager') {
+            let employees = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM managers');
+
+            prompt([
+                {
+                    type: 'input',
+                    name: 'first_name',
+                    message: 'What is the manger\'s first name?',
+                },
+                {
+                    type: 'input',
+                    name: 'last_name',
+                    message: 'What is the manager\'s last name?'
+                }
+            ])
+            .then(manData => {
+                db.promise().query(`INSERT INTO managers SET ?`, manData).then(data=>{
+                    updateDatabase();
+                });
+            })
+        }; 
+
         if(task=='Update Employee Role') {
             let employees = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM employees');
             let roles = await db.promise().query('SELECT title AS name, id AS value FROM roles');
