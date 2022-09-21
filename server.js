@@ -22,7 +22,8 @@ function updateDatabase() {
         };
         
         if(task=='View All Employees') {
-            db.promise().query('SELECT * FROM employees').then(data=>{
+            db.promise().query('SELECT employees.first_name, employees.last_name, roles.title, roles.salary FROM employees INNER JOIN roles ON employees.role_id=roles.id;')
+            .then(data=>{
                 console.table(data[0]);
                 updateDatabase();
             });
