@@ -135,7 +135,7 @@ function updateDatabase() {
                 }
             ])
             .then(empData => {
-                db.promise().query(`INSERT INTO employees SET ?`,empData).then(data=>{
+                db.promise().query(`UPDATE employees SET role_id=${empData.role_id} WHERE id=${empData.id}`).then(data=>{
                     updateDatabase();
                 });
             })
