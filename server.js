@@ -11,7 +11,7 @@ function updateDatabase() {
             type: 'list',
             name: "task",
             message: "What would you like to do?",
-            choices: ['View All Employees', 'View All Roles', 'View All Departments', 'Add Employee', 'Add Role',  'Add Department', 'Update Employee Role'],
+            choices: ['View All Employees', 'View All Roles', 'View All Departments', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role'],
         },
     ]).then( async ({task}) => { 
         if(task=='View All Departments') {
@@ -116,7 +116,30 @@ function updateDatabase() {
                 });
             })
         }; 
+        if(task=='Update Employee Role') {
+            let employees = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value FROM employees');
+            let roles = await db.promise().query('SELECT title AS name, id AS value FROM roles');
 
+            prompt([
+                {
+                    type: 'list',
+                    name: 'id',
+                    message: 'Which employee role do you want to update?',
+                    choices: employees[0]
+                },
+                {
+                    type: 'list',
+                    name: 'role_id',
+                    message: 'What role do you want to assign to the selected employee?',
+                    choices: roles[0]
+                }
+            ])
+            .then(empData => {
+                db.promise().query(`INSERT INTO employees SET ?`,empData).then(data=>{
+                    updateDatabase();
+                });
+            })
+        }; 
     });
 
 };
