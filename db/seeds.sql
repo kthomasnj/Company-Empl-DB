@@ -12,11 +12,11 @@ VALUES  ("Human Resources", 1),
         ("Facilities", 3),
         ("Operations", 4);
 
-INSERT INTO roles (title, salary)
-VALUES  ("HR Generalist", 50000),
-        ("Desktop Support", 55000),
-        ("Facilities Specialist", 40000),
-        ("Machine Operator", 35000);
+INSERT INTO roles (title, salary, department_id)
+VALUES  ("HR Generalist", 50000, 1),
+        ("Desktop Support", 55000, 2),
+        ("Facilities Specialist", 40000, 3),
+        ("Machine Operator", 35000, 4);
 
 INSERT INTO employees (first_name, last_name, role_id)
 VALUES  ("Sam", "Harry", 5),
