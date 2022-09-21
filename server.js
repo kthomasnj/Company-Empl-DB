@@ -92,10 +92,6 @@ function updateDatabase() {
         if(task=='Add Employee') {
             let roles = await db.promise().query('SELECT title AS name, id AS value FROM roles');
 
-            let manager = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) AS name, id AS value  FROM employees');
-
-            console.log(manager[0]);
-
             prompt([
                 {
                     type: 'input',
@@ -103,7 +99,7 @@ function updateDatabase() {
                     message: 'What is the first name of the employee?'
                 },
                 {
-                    type: 'number',
+                    type: 'input',
                     name: 'last_name',
                     message: 'What is the last name of the employee?'
                 },
@@ -115,7 +111,6 @@ function updateDatabase() {
                 }
             ])
             .then(empData => {
-                compilePseud
                 db.promise().query(`INSERT INTO employees SET ?`,empData).then(data=>{
                     updateDatabase();
                 });
